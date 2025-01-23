@@ -39,10 +39,9 @@ function daily_verse_schema() {
         'description' => 'The verse ID from the API.',
       ],
       'last_access' => [
-        'type' => 'int',
-        'unsigned' => TRUE,
+        'type' => 'date',
         'not null' => TRUE,
-        'description' => 'The UNIX timestamp of the last access.',
+        'description' => 'The last access date in YYYY-MM-DD format.',
       ],
     ],
     'primary key' => ['ip_address', 'verse_id'],
@@ -70,7 +69,7 @@ function daily_verse_requirements($phase) {
 /**
  * Implements hook_update_N().
  */
-function daily_verse_update_8001() {
+function daily_verse_update_8002() {
   $schema = \Drupal::database()->schema();
   if ($schema->tableExists('verse_tracking')) {
     $schema->changeField(
@@ -78,8 +77,7 @@ function daily_verse_update_8001() {
       'last_access',
       'last_access',
       [
-        'type' => 'varchar',
-        'length' => 10,
+        'type' => 'date', // Use 'varchar' if you opted for that.
         'not null' => TRUE,
         'description' => 'The last access date in YYYY-MM-DD format.',
       ]
