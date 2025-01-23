@@ -22,6 +22,11 @@ function daily_verse_uninstall() {
 /**
  * Implements hook_schema().
  */
+<?php
+
+/**
+ * Implements hook_schema().
+ */
 function daily_verse_schema() {
   $schema['verse_tracking'] = [
     'description' => 'Tracks which verses have been seen by IP addresses.',
@@ -30,22 +35,26 @@ function daily_verse_schema() {
         'type' => 'varchar',
         'length' => 45,
         'not null' => TRUE,
+        'description' => 'The IP address of the visitor.',
       ],
       'verse_id' => [
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
+        'description' => 'The verse ID from the API.',
       ],
       'last_access' => [
         'type' => 'datetime',
         'not null' => TRUE,
-       
+        'description' => 'The last access timestamp in DATETIME format (YYYY-MM-DD HH:MM:SS).',
       ],
     ],
     'primary key' => ['ip_address', 'verse_id'],
   ];
+
   return $schema;
 }
+
 
 /**
  * Implements hook_requirements().
