@@ -1,0 +1,8 @@
+daily_verse.example:
+  path: '/daily-verse/example'
+  defaults:
+    _title: 'Example'
+    _controller: '\Drupal\daily_verse\Controller\DailyVerseController::build'
+  requirements:
+    _permission: 'access content'
+

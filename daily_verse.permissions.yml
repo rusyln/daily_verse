@@ -1,0 +1,4 @@
+administer daily_verse configuration:
+  title: 'Administer daily_verse configuration'
+  description: 'Optional description.'
+  restrict access: true
