@@ -29,13 +29,16 @@ function daily_verse_schema() {
       'ip_address' => [
         'type' => 'varchar',
         'length' => 45,
+        'not null' => TRUE,
       ],
       'verse_id' => [
         'type' => 'varchar',
         'length' => 255,
+        'not null' => TRUE,
       ],
       'last_access' => [
-        'type' => 'datetime'
+        'type' => 'datetime',
+        'not null' => TRUE,
        
       ],
     ],
