@@ -70,7 +70,7 @@ function daily_verse_requirements($phase) {
 /**
  * Implements hook_update_N().
  */
-function daily_verse_update_8002() {
+function daily_verse_update_8003() {
   $schema = \Drupal::database()->schema();
   if ($schema->tableExists('verse_tracking')) {
     $schema->changeField(
@@ -79,7 +79,7 @@ function daily_verse_update_8002() {
       'last_access',
       [
         'type' => 'varchar',
-        'length' => 10, // To store dates like 'YYYY-MM-DD'.
+        'length' => 100, // To store dates like 'YYYY-MM-DD'.
         'not null' => TRUE,
         'description' => 'The last access date in YYYY-MM-DD format.',
       ]
