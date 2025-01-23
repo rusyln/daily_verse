@@ -19,10 +19,6 @@ function daily_verse_uninstall() {
   \Drupal::messenger()->addStatus(__FUNCTION__);
 }
 
-/**
- * Implements hook_schema().
- */
-<?php
 
 /**
  * Implements hook_schema().
