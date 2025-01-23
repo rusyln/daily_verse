@@ -90,6 +90,9 @@ class DailyVerseController extends ControllerBase {
         '#verse_text' => $verse_text,
         '#verse_reference' => $reference,
         '#background_color' => $random_color,
+        '#cache' => [
+          'max-age' => 0,
+        ],
       ];
     } catch (\Exception $e) {
       \Drupal::logger('daily_verse')->error($e->getMessage());
