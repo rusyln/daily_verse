@@ -19,7 +19,6 @@ function daily_verse_uninstall() {
   \Drupal::messenger()->addStatus(__FUNCTION__);
 }
 
-
 /**
  * Implements hook_schema().
  */
@@ -41,6 +40,7 @@ function daily_verse_schema() {
       ],
       'last_access' => [
         'type' => 'datetime',
+        'mysql_type' => 'datetime', // Explicitly declare the MySQL/MariaDB type.
         'not null' => TRUE,
         'description' => 'The last access timestamp in DATETIME format (YYYY-MM-DD HH:MM:SS).',
       ],
@@ -50,7 +50,6 @@ function daily_verse_schema() {
 
   return $schema;
 }
-
 
 /**
  * Implements hook_requirements().
