@@ -2,4 +2,4 @@ name: Daily Verse
 type: module
 description: Daily Verse
 package: Custom
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^9 || ^10 || ^11

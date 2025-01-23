@@ -23,57 +23,30 @@ function daily_verse_uninstall() {
  * Implements hook_schema().
  */
 function daily_verse_schema() {
-  $schema['daily_verse_example'] = [
-    'description' => 'Table description.',
+  $schema['verse_tracking'] = [
+    'description' => 'Tracks which verses have been seen by IP addresses.',
     'fields' => [
-      'id' => [
-        'type' => 'serial',
+      'ip_address' => [
+        'type' => 'varchar',
+        'length' => 45,
         'not null' => TRUE,
-        'description' => 'Primary Key: Unique record ID.',
+        'description' => 'The IP address of the visitor.',
       ],
-      'uid' => [
+      'verse_id' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'The verse ID from the API.',
+      ],
+      'last_access' => [
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => 0,
-        'description' => 'The {users}.uid of the user who created the record.',
-      ],
-      'status' => [
-        'description' => 'Boolean indicating whether this record is active.',
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-        'default' => 0,
-        'size' => 'tiny',
-      ],
-      'type' => [
-        'type' => 'varchar_ascii',
-        'length' => 64,
-        'not null' => TRUE,
-        'default' => '',
-        'description' => 'Type of the record.',
-      ],
-      'created' => [
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => 0,
-        'description' => 'Timestamp when the record was created.',
-      ],
-      'data' => [
-        'type' => 'blob',
-        'not null' => TRUE,
-        'size' => 'big',
-        'description' => 'The arbitrary data for the item.',
+        'description' => 'The UNIX timestamp of the last access.',
       ],
     ],
-    'primary key' => ['id'],
-    'indexes' => [
-      'type' => ['type'],
-      'uid' => ['uid'],
-      'status' => ['status'],
-    ],
+    'primary key' => ['ip_address', 'verse_id'],
   ];
-
   return $schema;
 }
 
@@ -93,4 +66,23 @@ function daily_verse_requirements($phase) {
   }
 
   return $requirements;
+}
+/**
+ * Implements hook_update_N().
+ */
+function daily_verse_update_8001() {
+  $schema = \Drupal::database()->schema();
+  if ($schema->tableExists('verse_tracking')) {
+    $schema->changeField(
+      'verse_tracking',
+      'last_access',
+      'last_access',
+      [
+        'type' => 'varchar',
+        'length' => 10,
+        'not null' => TRUE,
+        'description' => 'The last access date in YYYY-MM-DD format.',
+      ]
+    );
+  }
 }
