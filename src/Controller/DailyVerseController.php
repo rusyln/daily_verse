@@ -78,7 +78,7 @@ class DailyVerseController extends ControllerBase {
         ->fields([
           'ip_address' => $ip,
           'verse_id' => $verse_id,
-          'last_access' => date('Y-m-d'), // Format date as a string
+          'last_access' => date('Y-m-d H:i:s'), // Format date as a string
         ])
         ->execute();
   
