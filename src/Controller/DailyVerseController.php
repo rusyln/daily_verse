@@ -18,6 +18,7 @@ class DailyVerseController extends ControllerBase {
     $query = $connection->select('verse_tracking', 'v')
       ->fields('v', ['verse_id'])
       ->condition('ip_address', $ip)
+      ->addTag('no_cache')
       ->execute();
     $seen_verses = $query->fetchCol();
     
@@ -31,30 +32,32 @@ class DailyVerseController extends ControllerBase {
       'PSA' => ['max_chapter' => 150, 'max_verse' => 6],
     ];
     
-    // Generate a new verse that hasn't been seen
-    $attempts = 0;
-    do {
-      // Randomly pick a Bible book
-      $bible_keys = array_keys($bible_data);
-      $random_bible_key = $bible_keys[array_rand($bible_keys)];
-      $book = $bible_data[$random_bible_key];
-      
-      // Get random chapter and verse
-      $max_chapter = $chapter_verse_data[$book]['max_chapter'];
-      $max_verse = $chapter_verse_data[$book]['max_verse'];
-      $random_chapter = rand(1, $max_chapter);
-      $random_verse = rand(1, $max_verse);
-      
-      // Generate verse ID
-      $verse_id = "{$book}.{$random_chapter}.{$random_verse}";
-      $reference = "{$book} {$random_chapter}:{$random_verse}";
-      
-      $attempts++;
-      if ($attempts > 50) {
-        // Fallback: Break the loop after 50 attempts to avoid infinite loop
-        break;
+    // Randomly pick a Bible book
+    $bible_keys = array_keys($bible_data);
+    $random_bible_key = $bible_keys[array_rand($bible_keys)];
+    $book = $bible_data[$random_bible_key];
+    $max_chapter = $chapter_verse_data[$book]['max_chapter'];
+    $max_verse = $chapter_verse_data[$book]['max_verse'];
+    
+    // Generate all possible verses and filter unseen
+    $all_verses = [];
+    for ($chapter = 1; $chapter <= $max_chapter; $chapter++) {
+      for ($verse = 1; $verse <= $max_verse; $verse++) {
+        $all_verses[] = "{$book}.{$chapter}.{$verse}";
       }
-    } while (in_array($verse_id, $seen_verses));
+    }
+    $unseen_verses = array_diff($all_verses, $seen_verses);
+    
+    // Handle case where all verses are seen
+    if (empty($unseen_verses)) {
+      return [
+        '#markup' => '<p>All verses have been seen! Please clear your seen verses or try again later.</p>',
+      ];
+    }
+    
+    // Pick a random unseen verse
+    $verse_id = $unseen_verses[array_rand($unseen_verses)];
+    $reference = str_replace('.', ' ', $verse_id);
     
     // Fetch verse details from the API
     $client = new Client();
