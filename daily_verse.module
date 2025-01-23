@@ -18,4 +18,17 @@ function daily_verse_theme() {
       ],
     ];
   }
+
+
+  function daily_verse_preprocess_page(&$variables) {
+    // Check if the current route matches your custom page
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    if ($route_name == 'daily_verse.verse_display') {
+      // Unset regions for navbar, footer, and page title
+      unset($variables['page']['navbar']);
+      unset($variables['page']['footer']);
+      unset($variables['page']['title']);
+    }
+  }
+  
   
